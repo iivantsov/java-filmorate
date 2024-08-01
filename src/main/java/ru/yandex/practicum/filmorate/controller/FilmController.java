@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.model.Film;
+
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class FilmController {
+@RequestMapping("filmorate/films")
+public class FilmController extends Controller<Film> {
 }
