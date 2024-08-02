@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PositiveDurationValidator.class)
 public @interface PositiveDuration {
-    String message() default "Duration should be positive";
+    String message() default "duration should be positive";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

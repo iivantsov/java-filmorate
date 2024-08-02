@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = WithoutSpacesValidator.class)
 public @interface WithoutSpaces {
-    String message() default "String should not contains space symbols";
+    String message() default "should not contains space symbols";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

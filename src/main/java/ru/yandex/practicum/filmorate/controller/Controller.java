@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Element;
 
@@ -13,6 +15,7 @@ import jakarta.validation.Valid;
 
 public abstract class Controller<E extends Element> {
     protected final Map<Integer, E> elements = new HashMap<>();
+    protected final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @GetMapping
     public Collection<E> get() {
@@ -24,6 +27,7 @@ public abstract class Controller<E extends Element> {
         validate(element);
         int id = getNextId();
         element.setId(id);
+        log.info("Validated and added - {}", element);
         elements.put(id, element);
         return element;
     }
@@ -33,8 +37,11 @@ public abstract class Controller<E extends Element> {
         validate(element);
         Integer id = element.getId();
         if (!elements.containsKey(id)) {
-            throw new NotFoundException(element.getClass().getSimpleName() + " with id = " + id + " not found");
+            String errorMessage = element.getClass().getSimpleName() + " with id = " + id + " not found";
+            log.error(errorMessage);
+            throw new NotFoundException(errorMessage);
         }
+        log.info("Validated and updated - {}", element);
         elements.put(id, element);
         return element;
     }
