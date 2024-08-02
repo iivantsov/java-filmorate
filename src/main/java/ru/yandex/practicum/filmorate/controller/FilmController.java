@@ -5,6 +5,10 @@ import ru.yandex.practicum.filmorate.model.Film;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("filmorate/films")
+@RequestMapping("/films")
 public class FilmController extends Controller<Film> {
+
+    @Override
+    protected void validate(Film film) {
+    }
 }
