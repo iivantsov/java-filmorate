@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.ToString;
 import ru.yandex.practicum.filmorate.validation.WithoutSpaces;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class User extends Element {
     @NotBlank
     @Email

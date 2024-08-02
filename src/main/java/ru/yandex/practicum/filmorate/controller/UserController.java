@@ -12,6 +12,7 @@ public class UserController extends Controller<User> {
     protected void validate(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
+            log.debug("Blank name replaced with login - {}", user.getName());
         }
     }
 }

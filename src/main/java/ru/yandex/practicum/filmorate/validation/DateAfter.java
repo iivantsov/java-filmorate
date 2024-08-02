@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = DateAfterValidator.class)
 public @interface DateAfter {
     String date();
-    String message() default "Date should be after the specified one";
+    String message() default "date should be after the specified one";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
