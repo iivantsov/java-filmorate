@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.ToString;
 import ru.yandex.practicum.filmorate.validation.WithoutSpaces;
 
 import java.time.LocalDate;
@@ -11,12 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class User extends Element {
+public class User {
     @NotBlank
     @Email
     private String email;
@@ -26,6 +22,7 @@ public class User extends Element {
     private String login;
 
     private String name;
+    private Integer id;
 
     @NotNull
     @PastOrPresent
