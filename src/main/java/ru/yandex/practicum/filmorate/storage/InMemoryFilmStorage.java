@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Collection<Film> getAll() {
         return films.values();
+    }
+
+    @Override
+    public Optional<Film> getById(int id) {
+        return Optional.ofNullable(films.get(id));
     }
 
     @Override

@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,11 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public Collection<User> getAll() {
         return users.values();
+    }
+
+    @Override
+    public Optional<User> getById(int id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override

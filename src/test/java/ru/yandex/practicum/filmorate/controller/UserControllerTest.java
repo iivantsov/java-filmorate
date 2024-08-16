@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -11,8 +12,7 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTest {
     private UserController controller;
@@ -27,7 +27,6 @@ public class UserControllerTest {
     @Test
     public void testUserWithBlankNameIsAddedWithNameEqualToLogin() {
         User blankNameUser = new User();
-        blankNameUser.setId(1);
         blankNameUser.setEmail("kesha@yandex.ru");
         blankNameUser.setLogin("Kesha");
         blankNameUser.setName(" ");
@@ -37,5 +36,10 @@ public class UserControllerTest {
 
         assertFalse(user.getName().isBlank());
         assertEquals(user.getName(), user.getLogin());
+    }
+
+    @Test
+    void testGetUserByInvalidIdThrowsNotFoundException() {
+        assertThrows(NotFoundException.class, () -> controller.getById(-1));
     }
 }

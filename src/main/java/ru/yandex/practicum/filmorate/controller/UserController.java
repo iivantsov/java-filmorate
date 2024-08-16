@@ -22,6 +22,11 @@ public class UserController {
         return service.getAll();
     }
 
+    @GetMapping("/{id}")
+    public User getById(@PathVariable int id) {
+        return service.getById(id);
+    }
+
     @PostMapping
     public User add(@RequestBody @Valid User user) {
         return service.add(user);

@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.Collection;
@@ -16,6 +18,10 @@ public class FilmService {
 
     public Collection<Film> getAll() {
         return storage.getAll();
+    }
+
+    public Film getById(int id) {
+        return storage.getById(id).orElseThrow(() -> new NotFoundException("film with id " + id + " not found"));
     }
 
     public Film add(Film film) {

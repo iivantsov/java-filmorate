@@ -9,17 +9,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-@RestControllerAdvice
 @Slf4j
-public class ValidationExceptionHandler {
+@RestControllerAdvice
+public class AppExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<ValidationExceptionResponse> handler(MethodArgumentNotValidException exception) {
+    public List<ValidationExceptionResponse> validationExceptionHandler(MethodArgumentNotValidException exception) {
         List<ValidationExceptionResponse> response = exception.getBindingResult().getFieldErrors().stream()
                 .map(e -> new ValidationExceptionResponse(e.getObjectName(), e.getField(), e.getDefaultMessage()))
                 .toList();
-        log.error("Validation failed - {}", response);
+        log.error("validation exception - {}", response);
         return response;
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse notFoundExceptionHandler(NotFoundException exception) {
+        log.error("not found exception - {}", exception.getMessage());
+        return new ExceptionResponse(exception.getMessage());
     }
 }
