@@ -7,15 +7,21 @@ import java.time.Month;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class UserControllerTest {
-    private UserController userController;
+    private UserController controller;
 
     @BeforeEach
     public void testInit() {
-        userController = new UserController();
+        UserStorage storage = new InMemoryUserStorage();
+        UserService service = new UserService(storage);
+        controller = new UserController(service);
     }
 
     @Test
@@ -27,7 +33,7 @@ public class UserControllerTest {
         blankNameUser.setName(" ");
         blankNameUser.setBirthday(LocalDate.of(2000, Month.JANUARY, 1));
 
-        User user = userController.add(blankNameUser);
+        User user = controller.add(blankNameUser);
 
         assertFalse(user.getName().isBlank());
         assertEquals(user.getName(), user.getLogin());
