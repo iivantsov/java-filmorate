@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -18,6 +19,10 @@ public class UserService {
 
     public Collection<User> getAll() {
         return storage.getAll();
+    }
+
+    public User getById(int id) {
+        return storage.getById(id).orElseThrow(() -> new NotFoundException("user with id " + id + " not found"));
     }
 
     public User add(User user) {
