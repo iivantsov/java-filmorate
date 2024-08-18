@@ -5,6 +5,8 @@ import ru.yandex.practicum.filmorate.validation.PositiveDuration;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -36,4 +38,6 @@ public class Film {
     public long getDurationInMinutes() {
         return duration.toSeconds();
     }
+
+    Set<Integer> usersWhoLiked = new HashSet<>();
 }
