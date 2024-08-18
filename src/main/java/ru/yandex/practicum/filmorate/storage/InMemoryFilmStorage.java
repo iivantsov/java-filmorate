@@ -47,6 +47,28 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
+    @Override
+    public Film manageLike(int filmId, int userId, LikeManageAction action) {
+        if (!films.containsKey(filmId)) {
+            throw new NotFoundException("film with id " + filmId + " not found");
+        }
+        Film film = films.get(filmId);
+
+        switch (action) {
+            case ADD -> {
+                film.getUsersWhoLiked().add(userId);
+                log.info("user id {} liked film id {}", userId, filmId);
+                log.debug("{}", film);
+            }
+            case REMOVE -> {
+                film.getUsersWhoLiked().remove(userId);
+                log.info("user id {} unliked film id {}", userId, filmId);
+                log.debug("{}", film);
+            }
+        }
+        return film;
+    }
+
     public int getNextId() {
         int nextId = films.keySet().stream()
                 .mapToInt(id -> id)

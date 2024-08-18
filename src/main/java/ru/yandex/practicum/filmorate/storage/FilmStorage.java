@@ -7,6 +7,11 @@ import java.util.Optional;
 
 public interface FilmStorage {
 
+    enum LikeManageAction {
+        ADD,
+        REMOVE
+    }
+
     Collection<Film> getAll();
 
     Optional<Film> getById(int id);
@@ -14,4 +19,6 @@ public interface FilmStorage {
     Film add(Film film);
 
     Film update(Film film);
+
+    Film manageLike(int filmId, int userId, LikeManageAction action);
 }
