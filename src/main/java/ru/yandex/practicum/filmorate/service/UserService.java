@@ -5,6 +5,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,26 @@ public class UserService {
     public User update(User user) {
         validate(user);
         return storage.update(user);
+    }
+
+    public Set<User> getAllFriends(int id) {
+        try {
+            return storage.getAllFriends(id);
+        } catch (NullPointerException e) {
+            throw new NotFoundException("user with id " + id + " not found");
+        }
+    }
+
+    public Set<User> getCommonFriends(int userId, int otherUserId) {
+        return storage.getCommonFriends(userId, otherUserId);
+    }
+
+    public User addFriend(int userId, int friendId) {
+        return storage.manageFriend(userId, friendId, UserStorage.UserFriendManageAction.ADD);
+    }
+
+    public User removeFriend(int userId, int friendId) {
+        return storage.manageFriend(userId, friendId, UserStorage.UserFriendManageAction.REMOVE);
     }
 
     private void validate(User user) {
