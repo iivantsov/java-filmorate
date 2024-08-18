@@ -40,9 +40,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film update(Film film) {
         Integer id = film.getId();
         if (!films.containsKey(id)) {
-            String errorMessage = "id not found - " + film;
-            log.error(errorMessage);
-            throw new NotFoundException(errorMessage);
+            throw new NotFoundException("film with id " + id + " not found");
         }
         films.put(id, film);
         log.info("validated and updated - {}", film);
