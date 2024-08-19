@@ -26,6 +26,10 @@ public class UserService {
         return storage.getUserById(id).orElseThrow(() -> new NotFoundException("user with id " + id + " not found"));
     }
 
+    public void validateUserPresenceById(int id) {
+        getUserById(id);
+    }
+
     public User addUser(User user) {
         validate(user);
         return storage.addUser(user);

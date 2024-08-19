@@ -38,6 +38,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         Integer id = user.getId();
+        validateUsersPresence(id);
         if (!users.containsKey(id)) {
             throw new NotFoundException("user with id " + id + " not found");
         }
@@ -55,7 +56,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public Set<User> getCommonFriends(int userId, int otherUserId) {
-        checkNotFound(userId, otherUserId);
+        validateUsersPresence(userId, otherUserId);
         return Stream.concat(users.get(userId).getFriends().stream(), users.get(otherUserId).getFriends().stream())
                 .filter(id -> id != userId && id != otherUserId)
                 .map(users::get)
@@ -64,7 +65,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User manageFriend(int userId, int friendId, UserFriendManageAction action) {
-        checkNotFound(userId, friendId);
+        validateUsersPresence(userId, friendId);
         User user = users.get(userId);
         User friend = users.get(friendId);
 
@@ -85,12 +86,14 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    private void checkNotFound(int userId, int otherUserId) {
-        if (!users.containsKey(userId)) {
-            throw new NotFoundException("user with id " + userId + " not found");
+    private void validateUsersPresence(int... userIds) {
+        if (userIds.length == 0) {
+            throw new IllegalArgumentException("no users provided for check");
         }
-        if (!users.containsKey(otherUserId)) {
-            throw new NotFoundException("user with id " + otherUserId + " not found");
+        for (int id : userIds) {
+            if (!users.containsKey(id)) {
+                throw new NotFoundException("user with id " + id + " not found");
+            }
         }
     }
 

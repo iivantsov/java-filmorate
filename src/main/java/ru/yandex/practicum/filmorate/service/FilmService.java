@@ -42,12 +42,12 @@ public class FilmService {
     }
 
     public Film likeFilm(int filmId, int userId) {
-        userService.getUserById(userId);
+        userService.validateUserPresenceById(userId);
         return storage.manageLike(filmId, userId, FilmStorage.LikeManageAction.ADD);
     }
 
     public Film unlikeFilm(int filmId, int userId) {
-        userService.getUserById(userId);
+        userService.validateUserPresenceById(userId);
         return storage.manageLike(filmId, userId, FilmStorage.LikeManageAction.REMOVE);
     }
 }
