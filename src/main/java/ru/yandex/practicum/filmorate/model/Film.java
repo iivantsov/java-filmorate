@@ -39,5 +39,5 @@ public class Film {
         return duration.toSeconds();
     }
 
-    Set<Integer> usersWhoLiked = new HashSet<>();
+    private Set<Integer> usersWhoLiked = new HashSet<>();
 }
