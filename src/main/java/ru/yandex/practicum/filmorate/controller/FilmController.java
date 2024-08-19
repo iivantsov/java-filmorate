@@ -19,37 +19,37 @@ public class FilmController {
     private final FilmService service;
 
     @GetMapping
-    public Collection<Film> getAll() {
-        return service.getAll();
+    public Collection<Film> getAllFilms() {
+        return service.getAllFilms();
     }
 
     @GetMapping("/popular")
-    public Collection<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
-        return service.getPopular(count);
+    public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return service.getPopularFilms(count);
     }
 
     @GetMapping("/{id}")
-    public Film getById(@PathVariable @Positive int id) {
-        return service.getById(id);
+    public Film getFilmById(@PathVariable @Positive int id) {
+        return service.getFilmById(id);
     }
 
     @PostMapping
-    public Film add(@RequestBody @Valid Film film) {
-        return service.add(film);
+    public Film addFilm(@RequestBody @Valid Film film) {
+        return service.addFilm(film);
     }
 
     @PutMapping
-    public Film update(@RequestBody @Valid Film film) {
-        return service.update(film);
+    public Film updateFilm(@RequestBody @Valid Film film) {
+        return service.updateFilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Film addLike(@PathVariable("id") int filmId, @PathVariable int userId) {
-        return service.addLike(filmId, userId);
+    public Film likeFilm(@PathVariable("id") int filmId, @PathVariable int userId) {
+        return service.likeFilm(filmId, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Film removeLike(@PathVariable("id") int filmId, @PathVariable int userId) {
-        return service.removeLike(filmId, userId);
+    public Film unlikeFilm(@PathVariable("id") int filmId, @PathVariable int userId) {
+        return service.unlikeFilm(filmId, userId);
     }
 }

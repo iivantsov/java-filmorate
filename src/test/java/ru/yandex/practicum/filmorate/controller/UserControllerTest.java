@@ -32,7 +32,7 @@ public class UserControllerTest {
         blankNameUser.setName(" ");
         blankNameUser.setBirthday(LocalDate.of(2000, Month.JANUARY, 1));
 
-        User user = controller.add(blankNameUser);
+        User user = controller.addUser(blankNameUser);
 
         assertFalse(user.getName().isBlank());
         assertEquals(user.getName(), user.getLogin());
@@ -40,6 +40,6 @@ public class UserControllerTest {
 
     @Test
     void testGetUserByInvalidIdThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> controller.getById(-1));
+        assertThrows(NotFoundException.class, () -> controller.getUserById(-1));
     }
 }

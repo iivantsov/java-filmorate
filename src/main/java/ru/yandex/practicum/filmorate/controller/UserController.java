@@ -20,29 +20,29 @@ public class UserController {
     private final UserService service;
 
     @GetMapping
-    public Collection<User> getAll() {
-        return service.getAll();
+    public Collection<User> getAllUsers() {
+        return service.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable int id) {
-        return service.getById(id);
+    public User getUserById(@PathVariable int id) {
+        return service.getUserById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User add(@RequestBody @Valid User user) {
-        return service.add(user);
+    public User addUser(@RequestBody @Valid User user) {
+        return service.addUser(user);
     }
 
     @PutMapping
-    public User update(@RequestBody @Valid User user) {
-        return service.update(user);
+    public User updateUser(@RequestBody @Valid User user) {
+        return service.updateUser(user);
     }
 
     @GetMapping("/{id}/friends")
-    public Set<User> getAllFriends(@PathVariable int id) {
-        return service.getAllFriends(id);
+    public Set<User> getAllUserFriends(@PathVariable int id) {
+        return service.getAllUserFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")

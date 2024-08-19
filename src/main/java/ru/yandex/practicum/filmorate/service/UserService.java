@@ -18,27 +18,27 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     private final UserStorage storage;
 
-    public Collection<User> getAll() {
-        return storage.getAll();
+    public Collection<User> getAllUsers() {
+        return storage.getAllUsers();
     }
 
-    public User getById(int id) {
-        return storage.getById(id).orElseThrow(() -> new NotFoundException("user with id " + id + " not found"));
+    public User getUserById(int id) {
+        return storage.getUserById(id).orElseThrow(() -> new NotFoundException("user with id " + id + " not found"));
     }
 
-    public User add(User user) {
+    public User addUser(User user) {
         validate(user);
-        return storage.add(user);
+        return storage.addUser(user);
     }
 
-    public User update(User user) {
+    public User updateUser(User user) {
         validate(user);
-        return storage.update(user);
+        return storage.updateUser(user);
     }
 
-    public Set<User> getAllFriends(int id) {
+    public Set<User> getAllUserFriends(int id) {
         try {
-            return storage.getAllFriends(id);
+            return storage.getAllUserFriends(id);
         } catch (NullPointerException e) {
             throw new NotFoundException("user with id " + id + " not found");
         }
