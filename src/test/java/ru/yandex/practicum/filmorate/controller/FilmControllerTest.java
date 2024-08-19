@@ -25,7 +25,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    void testGetFilmByInvalidIdThrowsNotFoundException() {
+    public void testGetFilmByInvalidIdThrowsNotFoundException() {
         assertThrows(NotFoundException.class, () -> controller.getFilmById(-1));
     }
 }
