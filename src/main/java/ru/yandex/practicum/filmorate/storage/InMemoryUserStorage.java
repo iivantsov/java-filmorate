@@ -17,17 +17,17 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
 
     @Override
-    public Collection<User> getAll() {
+    public Collection<User> getAllUsers() {
         return users.values();
     }
 
     @Override
-    public Optional<User> getById(int id) {
+    public Optional<User> getUserById(int id) {
         return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public User add(User user) {
+    public User addUser(User user) {
         int id = getNextId();
         user.setId(id);
         users.put(id, user);
@@ -36,7 +36,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User update(User user) {
+    public User updateUser(User user) {
         Integer id = user.getId();
         if (!users.containsKey(id)) {
             throw new NotFoundException("user with id " + id + " not found");
@@ -47,7 +47,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Set<User> getAllFriends(int id) {
+    public Set<User> getAllUserFriends(int id) {
         return users.get(id).getFriends().stream()
                 .map(users::get)
                 .collect(Collectors.toSet());

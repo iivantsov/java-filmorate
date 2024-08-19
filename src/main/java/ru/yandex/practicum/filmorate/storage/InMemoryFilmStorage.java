@@ -18,17 +18,17 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
-    public Collection<Film> getAll() {
+    public Collection<Film> getAllFilms() {
         return films.values();
     }
 
     @Override
-    public Optional<Film> getById(int id) {
+    public Optional<Film> getFilmById(int id) {
         return Optional.ofNullable(films.get(id));
     }
 
     @Override
-    public Film add(Film film) {
+    public Film addFilm(Film film) {
         int id = getNextId();
         film.setId(id);
         films.put(id, film);
@@ -37,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film update(Film film) {
+    public Film updateFilm(Film film) {
         Integer id = film.getId();
         if (!films.containsKey(id)) {
             throw new NotFoundException("film with id " + id + " not found");

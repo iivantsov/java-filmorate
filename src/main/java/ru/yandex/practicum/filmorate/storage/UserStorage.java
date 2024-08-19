@@ -13,15 +13,15 @@ public interface UserStorage {
         REMOVE
     }
 
-    Collection<User> getAll();
+    Collection<User> getAllUsers();
 
-    Optional<User> getById(int id);
+    Optional<User> getUserById(int id);
 
-    User add(User user);
+    User addUser(User user);
 
-    User update(User user);
+    User updateUser(User user);
 
-    Set<User> getAllFriends(int id);
+    Set<User> getAllUserFriends(int id);
 
     Set<User> getCommonFriends(int userId, int otherUserId);
 

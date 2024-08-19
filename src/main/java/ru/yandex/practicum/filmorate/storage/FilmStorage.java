@@ -12,13 +12,13 @@ public interface FilmStorage {
         REMOVE
     }
 
-    Collection<Film> getAll();
+    Collection<Film> getAllFilms();
 
-    Optional<Film> getById(int id);
+    Optional<Film> getFilmById(int id);
 
-    Film add(Film film);
+    Film addFilm(Film film);
 
-    Film update(Film film);
+    Film updateFilm(Film film);
 
     Film manageLike(int filmId, int userId, LikeManageAction action);
 }
