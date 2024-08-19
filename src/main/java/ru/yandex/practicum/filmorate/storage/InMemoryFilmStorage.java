@@ -69,7 +69,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
-    public int getNextId() {
+    private int getNextId() {
         int nextId = films.keySet().stream()
                 .mapToInt(id -> id)
                 .max()
