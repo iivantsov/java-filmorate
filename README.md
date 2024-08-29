@@ -26,3 +26,6 @@
     - **PUT /films/{id}/like/{userId}** - _add like_ 
     - **DELETE /films/{id}/like/{userId}** - _remove like_
     - **GET /films/popular?count={count}** - _get list of top liked films, {count} defines list size (10 by default)_
+### Version: 3.0
+#### SQL database added
+![filmorate_app_db.png](filmorate_app_db.png)
