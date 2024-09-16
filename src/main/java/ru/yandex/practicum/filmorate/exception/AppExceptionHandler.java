@@ -13,7 +13,6 @@ import jakarta.validation.ConstraintViolationException;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @RestControllerAdvice
 public class AppExceptionHandler {
@@ -40,6 +39,16 @@ public class AppExceptionHandler {
                 .collect(Collectors.joining(","));
         log.error("request parameters validation exception - {}", exception.getMessage());
         return new ExceptionResponse(userMessage);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse databaseExceptionHandler(DatabaseException exception) {
+        log.error("database exception - {} ({}) with root cause - {}",
+                exception.getMessage(),
+                exception.getStackTrace()[0].toString(),
+                exception.getRootCause().toString());
+        return new ExceptionResponse(exception.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
