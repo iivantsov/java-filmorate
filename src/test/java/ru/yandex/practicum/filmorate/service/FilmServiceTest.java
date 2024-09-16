@@ -3,10 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -27,12 +23,6 @@ public class FilmServiceTest {
 
     @BeforeEach
     public void testInit() {
-        UserStorage userStorage = new InMemoryUserStorage();
-        userService = new UserService(userStorage);
-
-        FilmStorage filmStorage = new InMemoryFilmStorage();
-        filmService = new FilmService(filmStorage, userService);
-
         // Create a valid Film instance
         film = new Film();
         film.setName("Leon");

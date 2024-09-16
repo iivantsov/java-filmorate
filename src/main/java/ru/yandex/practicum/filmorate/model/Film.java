@@ -1,12 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ru.yandex.practicum.filmorate.dto.GenreDto;
+import ru.yandex.practicum.filmorate.dto.MpaRatingDto;
 import ru.yandex.practicum.filmorate.validation.DateAfter;
 import ru.yandex.practicum.filmorate.validation.PositiveDuration;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -39,5 +41,8 @@ public class Film {
         return duration.toSeconds();
     }
 
-    private Set<Integer> usersWhoLiked = new HashSet<>();
+    private MpaRatingDto mpa;
+
+    @JsonDeserialize(as = LinkedHashSet.class)
+    private final Set<GenreDto> genres = new LinkedHashSet<>();
 }
