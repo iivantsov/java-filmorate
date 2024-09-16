@@ -3,8 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import ru.yandex.practicum.filmorate.validation.WithoutSpaces;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,6 +27,4 @@ public class User {
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
-
-    private Set<Integer> friends = new HashSet<>();
 }

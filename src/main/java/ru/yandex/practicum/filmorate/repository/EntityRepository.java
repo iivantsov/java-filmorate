@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.repository;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -20,8 +21,12 @@ public abstract class EntityRepository<T> {
     protected final RowMapper<T> rowMapper;
 
     protected Optional<T> getSingleEntity(String sql, Object... params) {
-        T result = jdbcT.queryForObject(sql, rowMapper, params);
-        return Optional.ofNullable(result);
+        try {
+            T result = jdbcT.queryForObject(sql, rowMapper, params);
+            return Optional.ofNullable(result);
+        } catch (DataAccessException exception) {
+            return Optional.empty();
+        }
     }
 
     protected List<T> getMultipleEntity(String sql, Object... params) {
