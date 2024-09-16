@@ -1,8 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.repository.UserRepository;
+import ru.yandex.practicum.filmorate.repository.mapper.UserRowMapper;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,17 +16,18 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+@JdbcTest
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@ContextConfiguration(classes = {UserService.class, UserRepository.class, UserRowMapper.class})
 public class UserServiceTest {
     private User user1;
-    private UserService service;
+    private final UserService service;
 
     @BeforeEach
     public void testInit() {
-        UserStorage storage = new InMemoryUserStorage();
-        service = new UserService(storage);
-
         // Create a valid User instance
         user1 = new User();
         user1.setEmail("user@yandex.ru");
@@ -37,6 +44,25 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testUserWithBlankNameIsAddedWithNameEqualToLogin() {
+        User blankNameUser = new User();
+        blankNameUser.setEmail("kesha@yandex.ru");
+        blankNameUser.setLogin("Kesha");
+        blankNameUser.setName(" ");
+        blankNameUser.setBirthday(LocalDate.of(2000, Month.JANUARY, 1));
+
+        User user = service.addUser(blankNameUser);
+
+        assertFalse(user.getName().isBlank());
+        assertEquals(user.getName(), user.getLogin());
+    }
+
+    @Test
+    void testGetUserByInvalidIdThrowsNotFoundException() {
+        assertThrows(NotFoundException.class, () -> service.getUserById(-1));
+    }
+
+    @Test
     public void testAddFriendLeadsToUsersBecomesFriendsWithEachOther() {
         User user2 = new User();
         user2.setEmail("user@yandex.ru");
@@ -48,8 +74,8 @@ public class UserServiceTest {
         service.addUser(user2);
         service.addFriend(user1.getId(), user2.getId());
 
-        assertTrue(user1.getFriends().contains(user2.getId()));
-        assertTrue(user2.getFriends().contains(user1.getId()));
+        assertTrue(service.getAllUserFriends(user1.getId()).contains(user2));
+        assertTrue(service.getAllUserFriends(user2.getId()).contains(user1));
     }
 
     @Test

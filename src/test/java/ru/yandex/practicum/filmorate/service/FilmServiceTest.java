@@ -1,8 +1,22 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.repository.FilmRepository;
+import ru.yandex.practicum.filmorate.repository.GenreRepository;
+import ru.yandex.practicum.filmorate.repository.MpaRatingRepository;
+import ru.yandex.practicum.filmorate.repository.UserRepository;
+import ru.yandex.practicum.filmorate.repository.mapper.FilmRowMapper;
+import ru.yandex.practicum.filmorate.repository.mapper.GenreRowMapper;
+import ru.yandex.practicum.filmorate.repository.mapper.MpaRatingRowMapper;
+import ru.yandex.practicum.filmorate.repository.mapper.UserRowMapper;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -14,12 +28,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+@JdbcTest
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@ContextConfiguration(classes = {
+        UserService.class, UserRepository.class, UserRowMapper.class,
+        FilmService.class, FilmRepository.class, FilmRowMapper.class,
+        GenreRepository.class, GenreRowMapper.class,
+        MpaRatingRepository.class, MpaRatingRowMapper.class
+})
 public class FilmServiceTest {
     private Film film;
-    private FilmService filmService;
+    private final FilmService filmService;
 
     private User user;
-    private UserService userService;
+    private final UserService userService;
 
     @BeforeEach
     public void testInit() {
@@ -43,6 +65,11 @@ public class FilmServiceTest {
         Film addedFilm = filmService.addFilm(film);
         assertEquals(film, addedFilm);
         assertNotNull(film.getId());
+    }
+
+    @Test
+    public void testGetFilmByInvalidIdThrowsNotFoundException() {
+        assertThrows(NotFoundException.class, () -> filmService.getFilmById(-1));
     }
 
     @Test
