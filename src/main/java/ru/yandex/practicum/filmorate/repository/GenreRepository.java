@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.repository;
 
-import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
@@ -33,6 +32,7 @@ public class GenreRepository extends EntityRepository<Genre> implements GenreSto
             """;
     private static final String SQL_GET_ALL_GENRES_TO_ALL_FILMS = """
             SELECT g.genre_id,
+                   g.genre_name,
                    fg.film_id
             FROM genres AS g
             JOIN films_genres AS fg ON g.genre_id = fg.genre_id
@@ -73,8 +73,10 @@ public class GenreRepository extends EntityRepository<Genre> implements GenreSto
 
         jdbcT.query(sql, (rs, rowNum) -> {
             Film film = idsToFilms.get(rs.getInt("film_id")); // Get Film from Map by obtained film_id
-            // Add obtained genre_id to Set inside Film
-            GenreDto genre = new GenreDto(rs.getInt("genre_id"));
+            // Add obtained Genre to Set inside Film
+            Genre genre = new Genre();
+            genre.setId(rs.getInt("genre_id"));
+            genre.setName(rs.getString("genre_name"));
             film.getGenres().add(genre);
             return film; // Not used
         }, filmIds);
