@@ -14,5 +14,6 @@ VALUES ('Комедия'),
        ('Боевик');
 
 INSERT INTO friendship_status (status_name)
-VALUES ('UNAPPROVED'),
-       ('APPROVED');
+VALUES ('NOT_FRIENDS'),
+       ('UNDECIDED'),
+       ('FRIENDS');

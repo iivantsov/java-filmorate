@@ -5,7 +5,10 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -41,11 +44,8 @@ public class UserService {
     }
 
     public Set<User> getAllUserFriends(int id) {
-        try {
-            return storage.getAllUserFriends(id);
-        } catch (NullPointerException e) {
-            throw new NotFoundException("user with id " + id + " not found");
-        }
+        getUserById(id);
+        return storage.getAllUserFriends(id);
     }
 
     public Set<User> getCommonFriends(int userId, int otherUserId) {
@@ -53,11 +53,15 @@ public class UserService {
     }
 
     public User addFriend(int userId, int friendId) {
-        return storage.manageFriend(userId, friendId, UserStorage.UserFriendManageAction.ADD);
+        User friend = getFriend(userId, friendId);
+        storage.manageFriendship(userId, friendId, UserStorage.UserFriendManageAction.ADD);
+        return friend;
     }
 
     public User removeFriend(int userId, int friendId) {
-        return storage.manageFriend(userId, friendId, UserStorage.UserFriendManageAction.REMOVE);
+        User friend = getFriend(userId, friendId);
+        storage.manageFriendship(userId, friendId, UserStorage.UserFriendManageAction.DEL);
+        return friend;
     }
 
     private void validate(User user) {
@@ -65,5 +69,19 @@ public class UserService {
             user.setName(user.getLogin());
             log.debug("blank name replaced with login - {}", user.getName());
         }
+    }
+
+    private User getFriend(int userId, int friendId) {
+        Map<Integer, User> idsToUsers = getAllUsers().stream()
+                .filter(user -> user.getId() == userId || user.getId() == friendId)
+                .collect(Collectors.toMap(User::getId, Function.identity()));
+
+        if (!idsToUsers.containsKey(userId)) {
+            throw new NotFoundException("user with id " + userId + " not found");
+        } else if (!idsToUsers.containsKey(friendId)) {
+            throw new NotFoundException("user with id " + friendId + " not found");
+        }
+
+        return idsToUsers.get(friendId);
     }
 }
