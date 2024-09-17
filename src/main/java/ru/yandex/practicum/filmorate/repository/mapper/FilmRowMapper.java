@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.repository.mapper;
 
-import ru.yandex.practicum.filmorate.dto.MpaRatingDto;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,9 @@ public class FilmRowMapper implements RowMapper<Film> {
         film.setReleaseDate(rs.getDate("release_date").toLocalDate());
         film.setDuration(Duration.ofSeconds(rs.getInt("duration")));
 
-        MpaRatingDto mpa = new MpaRatingDto(rs.getInt("mpa_id"));
+        MpaRating mpa = new MpaRating();
+        mpa.setId(rs.getInt("mpa_id"));
+        mpa.setName(rs.getString("mpa_name"));
         film.setMpa(mpa);
 
         return film;

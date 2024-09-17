@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ru.yandex.practicum.filmorate.dto.GenreDto;
-import ru.yandex.practicum.filmorate.dto.MpaRatingDto;
 import ru.yandex.practicum.filmorate.validation.DateAfter;
 import ru.yandex.practicum.filmorate.validation.PositiveDuration;
 
@@ -41,7 +40,7 @@ public class Film {
         return duration.toSeconds();
     }
 
-    private MpaRatingDto mpa;
+    private MpaRating mpa;
 
     @JsonDeserialize(as = LinkedHashSet.class)
     private final Set<GenreDto> genres = new LinkedHashSet<>();

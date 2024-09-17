@@ -26,13 +26,17 @@ import java.util.Optional;
 @Repository
 public class FilmRepository extends EntityRepository<Film> implements FilmStorage {
     private static final String SQL_GET_ALL_FILMS = """
-            SELECT *
-            FROM films;
+            SELECT F.*,
+                   R.mpa_name
+            FROM films AS F
+            JOIN mpa_ratings AS R ON R.mpa_id = F.mpa_id
             """;
     private static final String SQL_GET_FILM_BY_ID = """
-            SELECT *
-            FROM films
-            WHERE film_id = ?;
+            SELECT F.*,
+                   R.mpa_name
+            FROM films AS F
+            JOIN mpa_ratings AS R ON R.mpa_id = F.mpa_id
+            WHERE F.film_id = ?
             """;
     private static final String SQL_INSERT_FILM = """
             INSERT INTO films (title, description, release_date, duration, mpa_id)
