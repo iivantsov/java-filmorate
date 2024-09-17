@@ -8,11 +8,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import ru.yandex.practicum.filmorate.dto.GenreDto;
-import ru.yandex.practicum.filmorate.exception.DatabaseException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.exception.DatabaseException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -122,7 +122,7 @@ public class FilmRepository extends EntityRepository<Film> implements FilmStorag
         int rowsUpdated = updateEntity(SQL_DELETE_FILM_GENRE, filmId);
         log.debug("{} row deleted from films_genres table for film id {}", rowsUpdated, filmId);
 
-        List<Integer> genreIds = film.getGenres().stream().map(GenreDto::getId).toList();
+        List<Integer> genreIds = film.getGenres().stream().map(Genre::getId).toList();
         try {
             jdbcT.batchUpdate(SQL_INSERT_FILM_GENRE, new BatchPreparedStatementSetter() {
                 @Override

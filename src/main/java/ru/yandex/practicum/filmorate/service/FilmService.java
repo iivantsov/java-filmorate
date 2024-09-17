@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -34,11 +33,7 @@ public class FilmService {
     public Film getFilmById(int id) {
         Film film = filmStorage.getFilmById(id)
                 .orElseThrow(() -> new NotFoundException("film with id " + id + " not found"));
-
-        LinkedHashSet<GenreDto> genres = genreStorage.getGenresByFilmId((film.getId())).stream()
-                .map(genre -> new GenreDto(genre.getId()))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-
+        List<Genre> genres = genreStorage.getGenresByFilmId((film.getId()));
         film.getGenres().addAll(genres);
         return film;
     }
