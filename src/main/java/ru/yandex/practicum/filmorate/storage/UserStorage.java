@@ -10,7 +10,7 @@ public interface UserStorage {
 
     enum UserFriendManageAction {
         ADD,
-        REMOVE
+        DEL
     }
 
     Collection<User> getAllUsers();
@@ -25,5 +25,5 @@ public interface UserStorage {
 
     Set<User> getCommonFriends(int userId, int otherUserId);
 
-    User manageFriend(int userId, int friendId, UserFriendManageAction action);
+    void manageFriendship(int userId, int friendId, UserFriendManageAction action);
 }
