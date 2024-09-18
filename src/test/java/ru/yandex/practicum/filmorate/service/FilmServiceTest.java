@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.MpaRating;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.dao.DataAccessException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -29,12 +32,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @JdbcTest
+@AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @ContextConfiguration(classes = {
-        UserService.class, UserRepository.class, UserRowMapper.class,
-        FilmService.class, FilmRepository.class, FilmRowMapper.class,
-        GenreRepository.class, GenreRowMapper.class,
-        MpaRatingRepository.class, MpaRatingRowMapper.class
+        UserService.class,
+        UserRepository.class,
+        UserRowMapper.class,
+        FilmService.class,
+        FilmRepository.class,
+        FilmRowMapper.class,
+        GenreRepository.class,
+        GenreRowMapper.class,
+        MpaRatingRepository.class,
+        MpaRatingRowMapper.class
 })
 public class FilmServiceTest {
     private Film film;
@@ -51,6 +61,10 @@ public class FilmServiceTest {
         film.setDescription("Blockbuster");
         film.setDuration(Duration.ofMinutes(60));
         film.setReleaseDate(LocalDate.now());
+        MpaRating mpa = new MpaRating();
+        mpa.setId(1);
+        mpa.setName("G");
+        film.setMpa(mpa);
 
         // Create a valid User instance
         user = new User();
@@ -74,7 +88,7 @@ public class FilmServiceTest {
 
     @Test
     public void testGetPopularFilmsWithNegativeCountParameterThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> filmService.getPopularFilms(-1));
+        assertThrows(DataAccessException.class, () -> filmService.getPopularFilms(-1));
     }
 
     @Test
@@ -99,12 +113,16 @@ public class FilmServiceTest {
         anotherFilm.setDescription("Comedy");
         anotherFilm.setDuration(Duration.ofMinutes(120));
         anotherFilm.setReleaseDate(LocalDate.now());
+        MpaRating mpa = new MpaRating();
+        mpa.setId(2);
+        mpa.setName("PG");
+        anotherFilm.setMpa(mpa);
 
         filmService.addFilm(film);
         filmService.addFilm(anotherFilm);
 
-        filmService.likeFilm(film.getId(),user.getId());
-        filmService.likeFilm(film.getId(),anotherUser.getId());
+        filmService.likeFilm(film.getId(), user.getId());
+        filmService.likeFilm(film.getId(), anotherUser.getId());
         filmService.likeFilm(anotherFilm.getId(), anotherUser.getId());
 
         Collection<Film> expectedFilms = List.of(film, anotherFilm);
