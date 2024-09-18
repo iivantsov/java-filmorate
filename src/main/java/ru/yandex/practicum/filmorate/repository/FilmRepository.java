@@ -1,6 +1,11 @@
 package ru.yandex.practicum.filmorate.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.exception.DatabaseException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -8,11 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.exception.DatabaseException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -58,6 +59,24 @@ public class FilmRepository extends EntityRepository<Film> implements FilmStorag
     private static final String SQL_DELETE_FILM_GENRE = """
             DELETE FROM films_genres
             WHERE film_id = ?
+            """;
+    private static final String SQL_ADD_LIKE = """
+            INSERT INTO films_users_who_liked (film_id, user_id)
+            VALUES (?,?)
+            """;
+    private static final String SQL_DEL_LIKE = """
+            DELETE  FROM films_users_who_liked
+            WHERE film_id = ? AND user_id = ?
+            """;
+    private static final String SQL_GET_POPULAR_FILMS = """
+            SELECT F.*,
+                   R.mpa_name
+            FROM films AS F
+            JOIN mpa_ratings AS R ON R.mpa_id = F.mpa_id
+            JOIN films_users_who_liked AS L ON L.film_id = F.film_id
+            GROUP BY F.film_id
+            ORDER BY COUNT(L.user_id) DESC
+            LIMIT ?
             """;
 
     public FilmRepository(JdbcTemplate jdbcT, RowMapper<Film> rowMapper) {
@@ -113,8 +132,17 @@ public class FilmRepository extends EntityRepository<Film> implements FilmStorag
     }
 
     @Override
-    public Film manageLike(int filmId, int userId, LikeManageAction action) {
-        return null;
+    public void manageLike(int filmId, int userId, LikeManageAction action) {
+        String sql = "";
+        switch (action) {
+            case ADD -> sql = SQL_ADD_LIKE;
+            case DEL -> sql = SQL_DEL_LIKE;
+        }
+        updateEntity(sql, filmId, userId);
+    }
+
+    public Collection<Film> getPopularFilms(int count) {
+        return getMultipleEntity(SQL_GET_POPULAR_FILMS, count);
     }
 
     private void updateFilmsGenres(Film film) {

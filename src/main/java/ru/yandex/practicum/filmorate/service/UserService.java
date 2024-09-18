@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public Set<User> getAllUserFriends(int id) {
-        getUserById(id);
+        validateUserPresenceById(id);
         return storage.getAllUserFriends(id);
     }
 
