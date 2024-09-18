@@ -6,9 +6,11 @@ import ru.yandex.practicum.filmorate.repository.UserRepository;
 import ru.yandex.practicum.filmorate.repository.mapper.UserRowMapper;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -20,8 +22,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @JdbcTest
+@AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@ContextConfiguration(classes = {UserService.class, UserRepository.class, UserRowMapper.class})
+@ContextConfiguration(classes = {
+        UserService.class,
+        UserRepository.class,
+        UserRowMapper.class
+})
 public class UserServiceTest {
     private User user1;
     private final UserService service;
@@ -63,7 +70,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testAddFriendLeadsToUsersBecomesFriendsWithEachOther() {
+    public void testUser1AddUser2ToFriendsLeadsToUser2IsNotFriendOfUser1AndUser1IsFriendOfUser2() {
         User user2 = new User();
         user2.setEmail("user@yandex.ru");
         user2.setLogin("User2");
@@ -72,10 +79,10 @@ public class UserServiceTest {
 
         service.addUser(user1);
         service.addUser(user2);
-        service.addFriend(user1.getId(), user2.getId());
+        service.addFriend(user2.getId(), user1.getId());
 
-        assertTrue(service.getAllUserFriends(user1.getId()).contains(user2));
         assertTrue(service.getAllUserFriends(user2.getId()).contains(user1));
+        assertFalse(service.getAllUserFriends(user1.getId()).contains(user2));
     }
 
     @Test
@@ -98,7 +105,7 @@ public class UserServiceTest {
 
         service.addFriend(user1.getId(), user2.getId());
         service.addFriend(user1.getId(), user3.getId());
-        service.addFriend(user2.getId(),user3.getId());
+        service.addFriend(user2.getId(), user3.getId());
 
         Set<User> expectedCommonFriends = Set.of(user3);
         assertEquals(expectedCommonFriends, service.getCommonFriends(user1.getId(), user2.getId()));
