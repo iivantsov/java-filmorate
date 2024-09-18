@@ -27,5 +27,14 @@
     - **DELETE /films/{id}/like/{userId}** - _remove like_
     - **GET /films/popular?count={count}** - _get list of top liked films, {count} defines list size (10 by default)_
 ### Version: 3.0
-#### SQL database added
+#### Added SQL database to store App data
 ![filmorate_app_db.png](filmorate_app_db.png)
+- Added genres and MPA rating to film
+- Add users friendship status (not friends, undecided, friends)
+- Friendship becomes one-sided (if user1 requests friendship with user2 it means 
+user2 in not friend of user1 and user1 is friends of user2)
+- Added endpoints
+  - **GET /genres** - _get list of film genres_ 
+  - **GET /genres/{id}** - _get film genre by id_
+  - **GET /mpa** - _get list of MPA ratings_
+  - **GET /mpa/{id}** - _get MPA rating by id_
