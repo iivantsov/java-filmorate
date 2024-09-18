@@ -19,7 +19,6 @@ public class MpaRatingService {
     }
 
     public MpaRating getMpaRatingById(int id) {
-        return storage.getMpaRatingById(id)
-                .orElseThrow(() -> new NotFoundException("mpa rating with id " + id + " not found"));
+        return storage.getMpaRatingById(id).orElseThrow(() -> new NotFoundException(MpaRating.class, id));
     }
 }

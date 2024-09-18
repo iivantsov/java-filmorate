@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.exception.DatabaseException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Primary
 @Repository
 public class FilmRepository extends EntityRepository<Film> implements FilmStorage {
     private static final String SQL_GET_ALL_FILMS = """
@@ -121,7 +119,7 @@ public class FilmRepository extends EntityRepository<Film> implements FilmStorag
                     film.getMpa().getId(),
                     film.getId());
             if (rowsUpdated == 0) {
-                throw new NotFoundException("film with id " + film.getId() + " not found");
+                throw new NotFoundException(Film.class, film.getId());
             }
         } catch (DataAccessException exception) {
             throw new DatabaseException("wrong mpa rating id " + film.getMpa().getId(), exception.getCause());

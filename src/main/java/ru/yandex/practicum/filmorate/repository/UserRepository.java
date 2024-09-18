@@ -101,7 +101,7 @@ public class UserRepository extends EntityRepository<User> implements UserStorag
                 Date.valueOf(user.getBirthday()),
                 user.getId());
         if (rowsUpdated == 0) {
-            throw new NotFoundException("user with id " + user.getId() + " not found");
+            throw new NotFoundException(User.class, user.getId());
         }
         return user;
     }

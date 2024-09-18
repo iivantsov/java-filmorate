@@ -19,6 +19,6 @@ public class GenreService {
     }
 
     public Genre getGenreById(int id) {
-        return storage.getGenreById(id).orElseThrow(() -> new NotFoundException("genre with id " + id + " not found"));
+        return storage.getGenreById(id).orElseThrow(() -> new NotFoundException(Genre.class, id));
     }
 }

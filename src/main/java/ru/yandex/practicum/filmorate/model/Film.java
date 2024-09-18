@@ -39,6 +39,7 @@ public class Film {
         return duration.toSeconds();
     }
 
+    @NotNull
     private MpaRating mpa;
 
     @JsonDeserialize(as = LinkedHashSet.class)
