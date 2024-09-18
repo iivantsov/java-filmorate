@@ -17,7 +17,6 @@ import ru.yandex.practicum.filmorate.storage.GenreStorage;
 public class FilmService {
     private final FilmStorage filmStorage;
     private final GenreStorage genreStorage;
-
     private final UserService userService;
 
     public Collection<Film> getAllFilms() {
@@ -27,7 +26,9 @@ public class FilmService {
     }
 
     public Collection<Film> getPopularFilms(int count) {
-        return List.of();
+        Collection<Film> popularFilms = filmStorage.getPopularFilms(count);
+        genreStorage.addGenresToFilms(popularFilms);
+        return popularFilms;
     }
 
     public Film getFilmById(int id) {
@@ -47,12 +48,17 @@ public class FilmService {
     }
 
     public Film likeFilm(int filmId, int userId) {
-        userService.validateUserPresenceById(userId);
-        return filmStorage.manageLike(filmId, userId, FilmStorage.LikeManageAction.ADD);
+        return manageLike(filmId, userId, FilmStorage.LikeManageAction.ADD);
     }
 
     public Film unlikeFilm(int filmId, int userId) {
+        return manageLike(filmId, userId, FilmStorage.LikeManageAction.DEL);
+    }
+
+    private Film manageLike(int filmId, int userId, FilmStorage.LikeManageAction action) {
         userService.validateUserPresenceById(userId);
-        return filmStorage.manageLike(filmId, userId, FilmStorage.LikeManageAction.REMOVE);
+        Film film = getFilmById(filmId);
+        filmStorage.manageLike(filmId, userId, action);
+        return film;
     }
 }

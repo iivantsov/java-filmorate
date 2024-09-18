@@ -9,7 +9,7 @@ public interface FilmStorage {
 
     enum LikeManageAction {
         ADD,
-        REMOVE
+        DEL
     }
 
     Collection<Film> getAllFilms();
@@ -20,5 +20,7 @@ public interface FilmStorage {
 
     Film updateFilm(Film film);
 
-    Film manageLike(int filmId, int userId, LikeManageAction action);
+    void manageLike(int filmId, int userId, LikeManageAction action);
+
+    Collection<Film> getPopularFilms(int count);
 }
