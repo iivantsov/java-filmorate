@@ -33,6 +33,10 @@ public class FilmTest {
         film.setDescription("Blockbuster");
         film.setDuration(Duration.ofMinutes(60));
         film.setReleaseDate(LocalDate.now());
+        MpaRating mpa = new MpaRating();
+        mpa.setId(1);
+        mpa.setName("G");
+        film.setMpa(mpa);
     }
 
     @AfterEach

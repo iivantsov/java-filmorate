@@ -32,8 +32,7 @@ public class FilmService {
     }
 
     public Film getFilmById(int id) {
-        Film film = filmStorage.getFilmById(id)
-                .orElseThrow(() -> new NotFoundException("film with id " + id + " not found"));
+        Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundException(Film.class, id));
         List<Genre> genres = genreStorage.getGenresByFilmId((film.getId()));
         film.getGenres().addAll(genres);
         return film;

@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public User getUserById(int id) {
-        return storage.getUserById(id).orElseThrow(() -> new NotFoundException("user with id " + id + " not found"));
+        return storage.getUserById(id).orElseThrow(() -> new NotFoundException(User.class, id));
     }
 
     public void validateUserPresenceById(int id) {
@@ -77,9 +77,9 @@ public class UserService {
                 .collect(Collectors.toMap(User::getId, Function.identity()));
 
         if (!idsToUsers.containsKey(userId)) {
-            throw new NotFoundException("user with id " + userId + " not found");
+            throw new NotFoundException(User.class, userId);
         } else if (!idsToUsers.containsKey(friendId)) {
-            throw new NotFoundException("user with id " + friendId + " not found");
+            throw new NotFoundException(User.class, friendId);
         }
 
         return idsToUsers.get(friendId);
